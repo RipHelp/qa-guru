@@ -1,17 +1,24 @@
 import glob
 import os
 import pytest
+from os import path
 
-TMP_DIR = os.path.abspath((os.path.join(os.path.dirname(__file__), '../tmp')))
+RESOURCES_DIR = path.abspath(
+    path.join(path.dirname(__file__), '../resources')
+)
+
+TMP_MAIN = path.abspath(
+    path.join(path.dirname(__file__), '../tmp')
+)
 
 
 @pytest.fixture(scope='function')
 def test_prepare():
-    if not os.path.exists(TMP_DIR):
-        os.makedirs(TMP_DIR)
+    if not os.path.exists(RESOURCES_DIR):
+        os.makedirs(RESOURCES_DIR)
 
     yield
 
-    files = glob.glob(os.path.join(TMP_DIR, '*'))
+    files = glob.glob(os.path.join(RESOURCES_DIR, '*'))
     for f in files:
         os.remove(f)
