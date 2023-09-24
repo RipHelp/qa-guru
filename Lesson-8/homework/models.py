@@ -13,12 +13,14 @@ class Product:
         self.description = description
         self.quantity = quantity
 
-    def check_quantity(self, quantity) -> bool:
+    def check_quantity(self, quantity) -> bool or ValueError:
         """
-        TODO Верните True если количество продукта больше или равно запрашиваемому
+        Верните True если количество продукта больше или равно запрашиваемому
             и False в обратном случае
         """
-        raise NotImplementedError
+        if self.quantity < 0:
+            raise ValueError
+        return True if self.quantity <= quantity else False
 
     def buy(self, quantity):
         """
@@ -26,7 +28,10 @@ class Product:
             Проверьте количество продукта используя метод check_quantity
             Если продуктов не хватает, то выбросите исключение ValueError
         """
-        raise NotImplementedError
+        if self.check_quantity(quantity):
+            self.quantity -= quantity
+        else:
+            raise ValueError
 
     def __hash__(self):
         return hash(self.name + self.description)
@@ -50,7 +55,13 @@ class Cart:
         Метод добавления продукта в корзину.
         Если продукт уже есть в корзине, то увеличиваем количество
         """
-        raise NotImplementedError
+        if buy_count < 0:
+            raise NotImplementedError
+        if product in self.products:
+            self.products[product] += 1
+        else:
+            self.products[product] = buy_count
+
 
     def remove_product(self, product: Product, remove_count=None):
         """
