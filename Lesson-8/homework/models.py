@@ -1,3 +1,4 @@
+
 class Product:
     """
     Класс продукта
@@ -18,9 +19,9 @@ class Product:
             Верните True если количество продукта больше или равно запрашиваемому
             и False в обратном случае
         """
-        if self.quantity < 0:
-            raise ValueError
-        return True if self.quantity <= quantity else False
+        if quantity <= 0:
+            return ValueError
+        return True if self.quantity >= quantity else False
 
     def buy(self, quantity):
         """

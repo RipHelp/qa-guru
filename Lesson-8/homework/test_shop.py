@@ -2,12 +2,11 @@
 Протестируйте классы из модуля homework/models.py
 """
 import pytest
+from models import Product, Cart
 
-from homework.models import Product
 
-
-@pytest.fixture
-def product():
+@pytest.fixture(scope="function")
+def product_qa() -> Product:
     return Product("book", 100, "This is a book", 1000)
 
 
@@ -16,10 +15,14 @@ class TestProducts:
     Тестовый класс - это способ группировки ваших тестов по какой-то тематике
     Например, текущий класс группирует тесты на класс Product
     """
-
-    def test_product_check_quantity(self, product):
-        # TODO напишите проверки на метод check_quantity
-        pass
+    @pytest.mark.parametrize('quantity, result', [(-10, ValueError),
+                                                  (0, ValueError),
+                                                  (10, True),
+                                                  (1000, True),
+                                                  (1001, False)])
+    def test_product_check_quantity(self, product_qa: Product, quantity: int, result: bool or ValueError):
+        # напишите проверки на метод check_quantity
+        assert product_qa.check_quantity(quantity=quantity) == result
 
     def test_product_buy(self, product):
         # TODO напишите проверки на метод buy
