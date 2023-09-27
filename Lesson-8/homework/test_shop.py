@@ -22,16 +22,25 @@ class TestProducts:
                                                   (1001, False)])
     def test_product_check_quantity(self, product_qa: Product, quantity: int, result: bool or ValueError):
         # напишите проверки на метод check_quantity
-        assert product_qa.check_quantity(quantity=quantity) == result
+        assert product_qa.check_quantity(quantity=quantity) == result, f"test_product_check_quantity не прошел."
 
-    def test_product_buy(self, product):
-        # TODO напишите проверки на метод buy
-        pass
+    @pytest.mark.parametrize('quantity, result', [(100, 900),
+                                                  (500, 500),
+                                                  (1000, 0)])
+    def test_product_buy(self, product_qa: Product, quantity: int, result: int):
+        # напишите проверки на метод buy
+        product_qa.buy(quantity=quantity)
+        assert product_qa.quantity == result, (f"test_product_buy не прошел. Ожидаем {product_qa.quantity},"
+                                               f" получили {result}")
 
-    def test_product_buy_more_than_available(self, product):
-        # TODO напишите проверки на метод buy,
+    @pytest.mark.parametrize('quantity, result', [(1001, "ValueError"),
+                                                  (100000, "ValueError")])
+    def test_product_buy_more_than_available(self, product_qa: Product, quantity: int, result: int or ValueError):
+        #  напишите проверки на метод buy,
         #  которые ожидают ошибку ValueError при попытке купить больше, чем есть в наличии
-        pass
+        with pytest.raises(ValueError) as exception:
+            product_qa.buy(quantity)
+        assert exception.typename == result
 
 
 class TestCart:
